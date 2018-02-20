@@ -5,6 +5,7 @@
     using Sitecore.Rules;
     using Sitecore.Rules.Conditions;
     using Sitecore.Security.Accounts;
+    using System.Linq;
 
     public class UserRoleCondition<T> : WhenCondition<T> where T : RuleContext
     {
@@ -18,10 +19,12 @@
                 {
                     Role role = Role.FromName(str2);
 
-                    if (Context.User.Roles.Contains(role))
+                    #region Modified code
+                    if (RolesInRolesManager.GetRolesForUser(Context.User, true).Contains<Role>(role))
                     {
                         return true;
                     }
+                    #endregion
                 }
             }
             return false;
